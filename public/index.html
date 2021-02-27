@@ -4,9 +4,19 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!--A-Frame Script-->
+  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+
   <title>Hide and Seek</title>
 </head>
 <body>
-  <h1>It works!</h1>
+  <a-scene>
+    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" material="shader:flat;"></a-box>
+    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" material="shader:flat;"></a-sphere>
+    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" material="shader:flat;"></a-cylinder>
+    <a-plane position="0 0 0" rotation="-90 0 0" width="50" height="50" color="#7BC8A4" material="shader:flat;"></a-plane>
+    <a-sky color="#000000"></a-sky>
+  </a-scene>
 </body>
 </html>
