@@ -35,7 +35,7 @@ module.exports = function (io) {
       }
     });
 
-    socket.on("update-position", (position) => {
+    socket.on(UPDATE_POSITION, (position) => {
       const player = game.players.find((player) => player.id === socket.id);
       if (player) {
         player.updatePosition(position);
