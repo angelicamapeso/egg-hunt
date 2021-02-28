@@ -1,3 +1,2 @@
-window.addEventListener("load", (event) => {
-  const socket = io();
-});
+// Defining global variables
+const socket = io();
