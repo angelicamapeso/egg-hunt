@@ -1,6 +1,7 @@
 const Game = require("./classes/Game");
 const {
   FULL_ROOM,
+  JOIN,
   GAME_OBJECT,
   ADD_PLAYER,
   UPDATE_POSITION,
@@ -17,7 +18,7 @@ module.exports = function (io) {
       game = new Game();
     }
 
-    socket.on("join", (position) => {
+    socket.on(JOIN, (position) => {
       const newPlayer = game.addPlayer(socket.id, position);
       if (newPlayer) {
         socket.join("game-room");
