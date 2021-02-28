@@ -17,7 +17,9 @@ Game.prototype.addPlayer = function (socketID, position) {
 };
 
 Game.prototype.removePlayer = function (socketID) {
+  const playerToRemove = this.players.find((player) => player.id === socketID);
   this.players = this.players.filter((player) => player.id !== socketID);
+  return playerToRemove;
 };
 
 module.exports = Game;
