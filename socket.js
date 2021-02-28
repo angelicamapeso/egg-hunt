@@ -37,6 +37,8 @@ module.exports = function (io) {
       const player = game.players.find((player) => player.id === socket.id);
       if (player) {
         player.updatePosition(position);
+
+        // tell other sockets that the other player has moved
         socket.to("game-room").emit(UPDATE_POSITION, player);
       }
     });
