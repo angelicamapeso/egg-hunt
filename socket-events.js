@@ -1,5 +1,6 @@
 module.exports = {
   FULL_ROOM: "full-room",
+  GAME_OBJECT: "game-object",
   ADD_PLAYER: "add-player",
   REMOVE_PLAYER: "remove-player",
   UPDATE_POSITION: "update-position",
