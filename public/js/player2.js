@@ -21,10 +21,10 @@ AFRAME.registerComponent("player2", {
       }
     };
 
-    socket.on("update-position", this.updatePosition);
+    socket.on(UPDATE_POSITION, this.updatePosition);
   },
 
   remove: function () {
-    socket.removeEventListener("update-game", this.updatePosition);
+    socket.removeEventListener(UPDATE_POSITION, this.updatePosition);
   },
 });

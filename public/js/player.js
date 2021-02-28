@@ -12,7 +12,7 @@ AFRAME.registerComponent("player", {
     // Send position
     this.sendPosition = () => {
       this.updatePosition();
-      this.socket.emit("update-position", [
+      this.socket.emit(UPDATE_POSITION, [
         this.position.x,
         this.position.y,
         this.position.z,
@@ -21,11 +21,7 @@ AFRAME.registerComponent("player", {
 
     // Update position when first join
     this.updatePosition();
-    this.socket.emit("join", [
-      this.position.x,
-      this.position.y,
-      this.position.z,
-    ]);
+    this.socket.emit(JOIN, [this.position.x, this.position.y, this.position.z]);
   },
 
   tick: function () {

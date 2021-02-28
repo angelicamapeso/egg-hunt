@@ -55,9 +55,9 @@ AFRAME.registerComponent("game", {
       el.style.display = "none";
     };
 
-    this.socket.on("game-object", this.setGameObject);
-    this.socket.on("add-player", this.addPlayer);
-    this.socket.on("remove-player", this.removePlayer);
-    this.socket.on("full-room", this.hideScene);
+    this.socket.on(GAME_OBJECT, this.setGameObject);
+    this.socket.on(ADD_PLAYER, this.addPlayer);
+    this.socket.on(REMOVE_PLAYER, this.removePlayer);
+    this.socket.on(FULL_ROOM, this.hideScene);
   },
 });
