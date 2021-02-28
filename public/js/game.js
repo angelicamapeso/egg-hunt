@@ -37,6 +37,19 @@ AFRAME.registerComponent("game", {
       }
     };
 
+    this.removePlayer = (removedPlayer) => {
+      if (this.game) {
+        this.game.players = this.game.players.filter(
+          (player) => player.id !== removedPlayer.id
+        );
+
+        // remove the object representing player 2
+        if (removedPlayer.id !== socket.id && this.player2) {
+          this.player2.remove();
+        }
+      }
+    };
+
     // hide scene
     this.hideScene = () => {
       el.style.display = "none";
@@ -44,6 +57,7 @@ AFRAME.registerComponent("game", {
 
     this.socket.on("game-object", this.setGameObject);
     this.socket.on("add-player", this.addPlayer);
+    this.socket.on("remove-player", this.removePlayer);
     this.socket.on("full-room", this.hideScene);
   },
 });

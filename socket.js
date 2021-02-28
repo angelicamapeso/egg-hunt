@@ -4,6 +4,7 @@ const {
   GAME_OBJECT,
   ADD_PLAYER,
   UPDATE_POSITION,
+  REMOVE_PLAYER,
 } = require("./socket-events.js");
 
 // The game state for the server
@@ -44,7 +45,11 @@ module.exports = function (io) {
     });
 
     socket.on("disconnect", () => {
-      game.removePlayer(socket.id);
+      const removedPlayer = game.removePlayer(socket.id);
+
+      // tell other sockets that a player has left the game
+      socket.to("game-room").emit(REMOVE_PLAYER, removedPlayer);
+
       console.log("Removed player:\n", game);
     });
   });
