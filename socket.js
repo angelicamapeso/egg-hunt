@@ -1,4 +1,5 @@
 const Game = require("./classes/Game");
+const { FULL_ROOM } = require("./socket-events.js");
 
 // The game state for the server
 // Meant to hold game object with all of game information
@@ -17,7 +18,7 @@ module.exports = function (io) {
         socket.to("game-room").emit("update-game", JSON.stringify(game));
         console.log("Added player:\n", game);
       } else {
-        io.to(socket.id).emit("full-room");
+        io.to(socket.id).emit(FULL_ROOM);
       }
     });
 
