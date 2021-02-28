@@ -4,6 +4,7 @@ const app = express();
 const server = require("http").createServer(app);
 // Websocket
 const io = require("socket.io")(server);
+const ioEvents = require("./socket.js")(io);
 
 // Set port (process.env.PORT if deploying)
 const PORT = process.env.PORT || 8080;
