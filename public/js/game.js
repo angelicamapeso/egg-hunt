@@ -11,6 +11,17 @@ AFRAME.registerComponent("game", {
     this.player2 = null;
     this.createPlayer2 = this.createPlayer2.bind(this);
 
+    // reference to start button element
+    // Hide button
+    this.startBtnGrp = document.getElementById("start-game-grp");
+    this.startBtn = document.getElementById("start-game-btn");
+    hideElement(this.startBtnGrp);
+    hideElement(this.startBtn);
+
+    // Binding
+    this.handleLobbyState = this.handleLobbyState.bind(this);
+    this.handleReadyState = this.handleReadyState.bind(this);
+
     // websocket listeners
     this.socket.on(GAME_OBJECT, this.setGameObject.bind(this));
     this.socket.on(ADD_PLAYER, this.addPlayer.bind(this));
@@ -60,7 +71,27 @@ AFRAME.registerComponent("game", {
       this.game.state = state;
       console.log("State change", state);
       /* TODO: add switch statement to do something when state changes */
+      switch (this.game.state) {
+        case "lobby":
+          this.handleLobbyState();
+          break;
+        case "ready":
+          this.handleReadyState();
+          break;
+        default:
+          console.log("Invalid state entered!");
+      }
     }
+  },
+
+  handleLobbyState: function () {
+    hideElement(this.startBtnGrp);
+    hideElement(this.startBtn);
+  },
+
+  handleReadyState: function () {
+    showElement(this.startBtnGrp);
+    showElement(this.startBtn);
   },
 
   // hide scene - used when max players reached
