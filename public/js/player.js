@@ -4,23 +4,27 @@ AFRAME.registerComponent("player", {
     this.socket = socket;
 
     // Update position
-    this.updatePosition = () => {
+    this.getPosition = () => {
       let position = new THREE.Vector3();
-      this.position = this.el.object3D.getWorldPosition(position);
+      return this.el.object3D.getWorldPosition(position);
     };
 
     // Send position
     this.sendPosition = () => {
-      this.updatePosition();
-      this.socket.emit(UPDATE_POSITION, [
-        this.position.x,
-        this.position.y,
-        this.position.z,
-      ]);
+      const currentPosition = this.getPosition();
+      if (this.position && !this.position.equals(currentPosition)) {
+        this.position = currentPosition;
+        this.socket.emit(UPDATE_POSITION, [
+          this.position.x,
+          this.position.y,
+          this.position.z,
+        ]);
+      }
     };
 
     // Update position when first join
-    this.updatePosition();
+    this.position = this.getPosition();
+    console.log(this.position);
     this.socket.emit(JOIN, [this.position.x, this.position.y, this.position.z]);
   },
 
