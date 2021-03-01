@@ -7,10 +7,10 @@ class Game {
 }
 
 // Returns true if player successfully added and false if not
-Game.prototype.addPlayer = function (socketID, position) {
+Game.prototype.addPlayer = function (socketID, position, rotation) {
   let newPlayer = null;
   if (this.players.length < 2) {
-    newPlayer = new Player(socketID, position);
+    newPlayer = new Player(socketID, position, rotation);
     this.players.push(newPlayer);
   }
   return newPlayer;
