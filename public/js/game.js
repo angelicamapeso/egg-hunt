@@ -113,6 +113,19 @@ AFRAME.registerComponent("game", {
 });
 
 /* Start button*/
+AFRAME.registerComponent("start-btn", {
+  init: function () {
+    this.handleClick = () => {
+      socket.emit(STATE_CHANGE, "playing");
+    };
+
+    this.el.addEventListener("click", this.handleClick);
+  },
+
+  remove: function () {
+    this.el.removeEventListener("click", this.handleClick);
+  },
+});
 
 /* Global helper functions */
 function hideElement(element) {
