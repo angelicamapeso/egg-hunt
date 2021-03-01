@@ -7,6 +7,7 @@ const {
   UPDATE_POSITION,
   UPDATE_ROTATION,
   REMOVE_PLAYER,
+  STATE_CHANGE,
 } = require("./socket-events.js");
 
 // The game state for the server
@@ -29,6 +30,10 @@ module.exports = function (io) {
 
         // tell other sockets that there's a new player
         socket.to("game-room").emit(ADD_PLAYER, newPlayer);
+
+        if (game.players.length == 2) {
+          socket.to("game-room").emit(STATE_CHANGE, "ready");
+        }
 
         console.log("Added player:\n", game);
       } else {
