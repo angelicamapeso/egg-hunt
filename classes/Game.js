@@ -3,6 +3,14 @@ const Player = require("./Player.js");
 class Game {
   constructor() {
     this.players = [];
+    /* Controls the state of the game */
+    /* 
+      "lobby" = waiting for players
+      "ready" = 2 players currently in game
+      "playing" = game currently running
+      "ended" = game has ended
+    */
+    this.state = "lobby";
   }
 }
 
