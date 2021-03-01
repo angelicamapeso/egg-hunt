@@ -6,7 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <!--A-Frame Script-->
-  <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+  <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
+  <!--A-Frame physics-->
+  <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
 
   <!--Websocket client-->
   <script src="/socket.io/socket.io.js"></script>
@@ -20,12 +22,14 @@
   <title>Hide and Seek</title>
 </head>
 <body>
-  <a-scene game>
-    <a-entity camera player position="0 1.6 0" look-controls wasd-controls></a-entity>
-    <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" material="shader:flat;"></a-box>
-    <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E" material="shader:flat;"></a-sphere>
-    <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" material="shader:flat;"></a-cylinder>
-    <a-plane position="0 0 0" rotation="-90 0 0" width="50" height="50" color="#7BC8A4" material="shader:flat;"></a-plane>
+  <a-scene game physics="debug: true">
+    <a-entity camera player position="0 1 0" look-controls wasd-controls>
+      <a-entity static-body geometry="primitive: box;" color="#4CC3D9" position="0 0 0"></a-entity>
+    </a-entity>
+    <a-box static-body position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" material="shader:flat;"></a-box>
+    <a-sphere static-body position="0 1.25 -5" radius="1.25" color="#EF2D5E" material="shader:flat;"></a-sphere>
+    <a-cylinder static-body position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" material="shader:flat;"></a-cylinder>
+    <a-plane static-body position="0 0 0" rotation="-90 0 0" width="50" height="50" color="#7BC8A4" material="shader:flat;"></a-plane>
     <a-sky color="#000000"></a-sky>
   </a-scene>
 </body>
