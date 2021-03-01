@@ -5,6 +5,7 @@ const {
   GAME_OBJECT,
   ADD_PLAYER,
   UPDATE_POSITION,
+  UPDATE_ROTATION,
   REMOVE_PLAYER,
 } = require("./socket-events.js");
 
@@ -18,8 +19,8 @@ module.exports = function (io) {
       game = new Game();
     }
 
-    socket.on(JOIN, (position) => {
-      const newPlayer = game.addPlayer(socket.id, position);
+    socket.on(JOIN, (position, rotation) => {
+      const newPlayer = game.addPlayer(socket.id, position, rotation);
       if (newPlayer) {
         socket.join("game-room");
 
@@ -42,6 +43,16 @@ module.exports = function (io) {
 
         // tell other sockets that the other player has moved
         socket.to("game-room").emit(UPDATE_POSITION, player);
+      }
+    });
+
+    socket.on(UPDATE_ROTATION, (rotation) => {
+      const player = game.players.find((player) => player.id === socket.id);
+      if (player) {
+        player.updateRotation(rotation);
+
+        // tell other sockets that player has rotated
+        socket.to("game-room").emit(UPDATE_ROTATION, player);
       }
     });
 

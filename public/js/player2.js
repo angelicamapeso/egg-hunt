@@ -13,8 +13,10 @@ AFRAME.registerComponent("player2", {
 
     // Binding
     this.updatePosition = this.updatePosition.bind(this);
+    this.updateRotation = this.updateRotation.bind(this);
 
     socket.on(UPDATE_POSITION, this.updatePosition);
+    socket.on(UPDATE_ROTATION, this.updateRotation);
   },
 
   remove: function () {
@@ -27,6 +29,17 @@ AFRAME.registerComponent("player2", {
         player.position[0],
         player.position[1],
         player.position[2]
+      );
+    }
+  },
+
+  updateRotation: function (player) {
+    if (player.id !== socket.id) {
+      this.el.object3D.quaternion.set(
+        player.rotation[0],
+        player.rotation[1],
+        player.rotation[2],
+        player.rotation[3]
       );
     }
   },
