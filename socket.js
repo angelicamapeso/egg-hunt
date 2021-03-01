@@ -32,7 +32,8 @@ module.exports = function (io) {
         socket.to("game-room").emit(ADD_PLAYER, newPlayer);
 
         if (game.players.length == 2) {
-          socket.to("game-room").emit(STATE_CHANGE, "ready");
+          game.state = "ready";
+          io.to("game-room").emit(STATE_CHANGE, "ready");
         }
 
         console.log("Added player:\n", game);
@@ -66,6 +67,11 @@ module.exports = function (io) {
 
       // tell other sockets that a player has left the game
       socket.to("game-room").emit(REMOVE_PLAYER, removedPlayer);
+
+      if (game.players.length < 2) {
+        game.state = "lobby";
+        io.to("game-room").emit(STATE_CHANGE, "lobby");
+      }
 
       console.log("Removed player:\n", game);
     });
