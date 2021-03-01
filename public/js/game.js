@@ -80,3 +80,21 @@ AFRAME.registerComponent("game", {
     this.el.appendChild(this.player2);
   },
 });
+
+/* Start button*/
+
+/* Global helper functions */
+function hideElement(element) {
+  element.setAttribute("visible", "false");
+  if (element.classList.contains("clickable")) {
+    element.classList.remove("clickable");
+    element.setAttribute("data-clickable", "true");
+  }
+}
+
+function showElement(element) {
+  element.setAttribute("visible", "true");
+  if (element.dataset.clickable) {
+    element.classList.add("clickable");
+  }
+}
