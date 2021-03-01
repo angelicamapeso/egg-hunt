@@ -6,4 +6,5 @@ module.exports = {
   REMOVE_PLAYER: "remove-player",
   UPDATE_POSITION: "update-position",
   UPDATE_ROTATION: "update-rotation",
+  STATE_CHANGE: "state-change",
 };

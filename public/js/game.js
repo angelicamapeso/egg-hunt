@@ -16,6 +16,7 @@ AFRAME.registerComponent("game", {
     this.socket.on(ADD_PLAYER, this.addPlayer.bind(this));
     this.socket.on(REMOVE_PLAYER, this.removePlayer.bind(this));
     this.socket.on(FULL_ROOM, this.hideScene.bind(this));
+    this.socket.on(STATE_CHANGE, this.handleStateChange.bind(this));
   },
 
   setGameObject: function (game) {
@@ -51,6 +52,14 @@ AFRAME.registerComponent("game", {
       if (removedPlayer.id !== socket.id && this.player2) {
         this.player2.remove();
       }
+    }
+  },
+
+  handleStateChange: function (state) {
+    if (this.game) {
+      this.game.state = state;
+      console.log("State change", state);
+      /* TODO: add switch statement to do something when state changes */
     }
   },
 
