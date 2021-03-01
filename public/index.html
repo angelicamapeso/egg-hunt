@@ -26,6 +26,12 @@
     <a-entity camera player position="0 1 0" look-controls wasd-controls>
       <a-entity static-body geometry="primitive: box;" color="#4CC3D9" position="0 0 0"></a-entity>
     </a-entity>
+
+    <a-entity id="start-game-button">
+      <a-box color="#4CC3D9" position="0 0.25 -2" width="0.5" depth="0.5" height="0.5"></a-box>
+      <a-cylinder id="button" color="#EF2D5E" position="0 0.3 -2" radius="0.1" height="0.5"></a-cylinder>
+    </a-entity>
+
     <a-box static-body position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9" material="shader:flat;"></a-box>
     <a-sphere static-body position="0 1.25 -5" radius="1.25" color="#EF2D5E" material="shader:flat;"></a-sphere>
     <a-cylinder static-body position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D" material="shader:flat;"></a-cylinder>
