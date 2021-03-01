@@ -4,60 +4,70 @@ AFRAME.registerComponent("game", {
     const el = this.el;
     this.socket = socket;
 
-    // update game state
+    // game state
     this.game = null;
+
+    // reference to player 2 element
     this.player2 = null;
+    this.createPlayer2 = this.createPlayer2.bind(this);
 
-    this.createPlayer2 = () => {
-      this.player2 = document.createElement("a-entity");
-      this.player2.setAttribute("player2", "");
-      el.appendChild(this.player2);
-    };
+    // websocket listeners
+    this.socket.on(GAME_OBJECT, this.setGameObject.bind(this));
+    this.socket.on(ADD_PLAYER, this.addPlayer.bind(this));
+    this.socket.on(REMOVE_PLAYER, this.removePlayer.bind(this));
+    this.socket.on(FULL_ROOM, this.hideScene.bind(this));
+  },
 
-    this.setGameObject = (game) => {
-      this.game = game;
+  setGameObject: function (game) {
+    this.game = game;
+    // there are now two players, so must draw the other player upon joining
+    if (this.game.players.length > 1) {
+      const otherPlayer = this.getPlayer2(game.players);
+      this.createPlayer2(otherPlayer.position);
+    }
+  },
 
-      // there are now two players, so must draw the other player upon joining
-      if (this.game.players.length > 1) {
-        this.createPlayer2();
-      }
-    };
+  // when there is only one player in game and another joins after
+  addPlayer: function (newPlayer) {
+    if (this.game) {
+      if (!this.game.players.find((player) => player.id === newPlayer.id)) {
+        this.game.players.push(newPlayer);
 
-    // for the case where player is alone and another player joins
-    this.addPlayer = (newPlayer) => {
-      if (this.game) {
-        if (!this.game.players.find((player) => player.id === newPlayer.id)) {
-          this.game.players.push(newPlayer);
-
-          // new player is the second player
-          if (newPlayer.id !== socket.id) {
-            this.createPlayer2();
-          }
+        // new player is the second player
+        if (newPlayer.id !== socket.id) {
+          this.createPlayer2(newPlayer.position);
         }
       }
-    };
+    }
+  },
 
-    this.removePlayer = (removedPlayer) => {
-      if (this.game) {
-        this.game.players = this.game.players.filter(
-          (player) => player.id !== removedPlayer.id
-        );
+  removePlayer: function (removedPlayer) {
+    if (this.game) {
+      this.game.players = this.game.players.filter(
+        (player) => player.id !== removedPlayer.id
+      );
 
-        // remove the object representing player 2
-        if (removedPlayer.id !== socket.id && this.player2) {
-          this.player2.remove();
-        }
+      // remove the object representing player 2
+      if (removedPlayer.id !== socket.id && this.player2) {
+        this.player2.remove();
       }
-    };
+    }
+  },
 
-    // hide scene
-    this.hideScene = () => {
-      el.style.display = "none";
-    };
+  // hide scene - used when max players reached
+  hideScene: function () {
+    this.el.style.display = "none";
+  },
 
-    this.socket.on(GAME_OBJECT, this.setGameObject);
-    this.socket.on(ADD_PLAYER, this.addPlayer);
-    this.socket.on(REMOVE_PLAYER, this.removePlayer);
-    this.socket.on(FULL_ROOM, this.hideScene);
+  // Helper functions
+  getPlayer2: function (players) {
+    return players.find((player) => player.id !== socket.id);
+  },
+
+  createPlayer2: function ([x, y, z]) {
+    this.player2 = document.createElement("a-entity");
+    this.player2.setAttribute("player2", "");
+    this.player2.object3D.position.set(x, y, z);
+    this.el.appendChild(this.player2);
   },
 });
