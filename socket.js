@@ -62,6 +62,22 @@ module.exports = function (io) {
       }
     });
 
+    socket.on(STATE_CHANGE, (state) => {
+      const validStates = ["lobby", "ready", "playing"];
+      if (validStates.includes(state)) {
+        game.state = state;
+        switch (game.state) {
+          case "playing":
+            io.to("game-room").emit(STATE_CHANGE, "playing");
+            break;
+          default:
+            console.log("State not implemented!");
+        }
+      } else {
+        console.log("Invalid state sent!");
+      }
+    });
+
     socket.on("disconnect", () => {
       const removedPlayer = game.removePlayer(socket.id);
 

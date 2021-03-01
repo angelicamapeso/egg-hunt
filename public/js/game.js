@@ -21,6 +21,7 @@ AFRAME.registerComponent("game", {
     // Binding
     this.handleLobbyState = this.handleLobbyState.bind(this);
     this.handleReadyState = this.handleReadyState.bind(this);
+    this.handlePlayingState = this.handlePlayingState.bind(this);
 
     // websocket listeners
     this.socket.on(GAME_OBJECT, this.setGameObject.bind(this));
@@ -78,6 +79,9 @@ AFRAME.registerComponent("game", {
         case "ready":
           this.handleReadyState();
           break;
+        case "playing":
+          this.handlePlayingState();
+          break;
         default:
           console.log("Invalid state entered!");
       }
@@ -92,6 +96,11 @@ AFRAME.registerComponent("game", {
   handleReadyState: function () {
     showElement(this.startBtnGrp);
     showElement(this.startBtn);
+  },
+
+  handlePlayingState: function () {
+    hideElement(this.startBtnGrp);
+    hideElement(this.startBtn);
   },
 
   // hide scene - used when max players reached
