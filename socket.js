@@ -70,12 +70,17 @@ module.exports = function (io) {
         switch (game.state) {
           case "playing":
             // generate environment objects
-            const envObjects = generateEnvObjects();
-            game.envObjects = envObjects;
+            game.envObjects = generateEnvObjects();
 
             // generate eggs
+            game.eggs = generateEggs();
 
-            io.to("game-room").emit(STATE_CHANGE, "playing", envObjects);
+            io.to("game-room").emit(
+              STATE_CHANGE,
+              "playing",
+              game.envObjects,
+              game.eggs
+            );
             break;
           default:
             console.log("State not implemented!");
@@ -102,11 +107,20 @@ module.exports = function (io) {
 };
 
 /* Helper functions*/
-const ENV_OBJ_COUNT = 50;
+const ENV_OBJ_COUNT = 40;
 function generateEnvObjects() {
   const shapeArray = [];
   for (let i = 0; i < ENV_OBJ_COUNT; i++) {
     shapeArray.push(Shape.generateRandomShape(i));
   }
   return shapeArray;
+}
+
+const EGG_COUNT = 20;
+function generateEggs() {
+  const eggArray = [];
+  for (let i = 0; i < EGG_COUNT; i++) {
+    eggArray.push(Shape.generateEgg(i));
+  }
+  return eggArray;
 }
