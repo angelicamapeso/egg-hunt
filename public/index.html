@@ -23,8 +23,7 @@
 </head>
 <body>
   <a-scene game physics="debug: true">
-    <a-entity camera player position="0 1 0" look-controls wasd-controls>
-      <a-entity static-body geometry="primitive: box;" position="0 0 0"></a-entity>
+    <a-entity id="player" camera static-body geometry="primitive: box;" player position="0 1 0" look-controls wasd-controls>
       <a-entity cursor="rayOrigin:mouse; fuse:false;" raycaster="far:20; interval:200; objects:.clickable;"></a-entity>
     </a-entity>
 
