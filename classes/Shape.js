@@ -124,6 +124,25 @@ Shape.generateRandomShape = function (id) {
   }
 };
 
+Shape.generateEgg = function (id) {
+  // Geometry
+  const geometryString = "primitive: dodecahedron; radius: 1;";
+
+  // Position
+  const position = Shape.getRandomPos(1.0);
+  const positionString = position.join(" ");
+
+  // Material
+  const colour = Shape.getRandColour();
+  const materialString = `color: ${colour};`;
+
+  return new Shape(id, {
+    geometry: geometryString,
+    position: positionString,
+    material: materialString,
+  });
+};
+
 /* Helper function for generating random numbers */
 function randNumBetween(min, max) {
   return min + Math.random() * (max - min);
