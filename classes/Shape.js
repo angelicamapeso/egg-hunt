@@ -13,6 +13,8 @@ Shape.colours = ["#4CC3D9", "#EF2D5E", "#FFC65D"];
 
 Shape.availableShapes = ["cube", "sphere", "cylinder"];
 
+Shape.opacitySetting = 0.7;
+
 Shape.getRandColour = function () {
   return Shape.colours[Math.floor(Math.random() * Shape.colours.length)];
 };
@@ -35,7 +37,7 @@ Shape.getRandomRot = function (minRotation, maxRotation) {
 
 Shape.generateCube = function (id) {
   // Geometry
-  const size = randNumBetween(4, 5.0);
+  const size = randNumBetween(3.0, 4.0);
   const geometryString = `primitive: box; width: ${size}; height: ${size}; depth: ${size};`;
 
   // Position
@@ -48,8 +50,7 @@ Shape.generateCube = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const opacity = randNumBetween(0.7, 0.9);
-  const materialString = `shader: flat; color: ${colour}; opacity: ${opacity};`;
+  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
 
   return new Shape(id, {
     geometry: geometryString,
@@ -61,7 +62,7 @@ Shape.generateCube = function (id) {
 
 Shape.generateSphere = function (id) {
   // Geometry
-  const size = randNumBetween(1.0, 4.0);
+  const size = randNumBetween(1.0, 3.0);
   const geometryString = `primitive: sphere; radius: ${size};`;
 
   // Position
@@ -70,8 +71,7 @@ Shape.generateSphere = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const opacity = randNumBetween(0.7, 0.9);
-  const materialString = `shader: flat; color: ${colour}; opacity: ${opacity};`;
+  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
 
   return new Shape(id, {
     geometry: geometryString,
@@ -82,8 +82,8 @@ Shape.generateSphere = function (id) {
 
 Shape.generateCylinder = function (id) {
   // Geometry
-  const height = randNumBetween(2.0, 4.0);
-  const radius = randNumBetween(1.5, 3.5);
+  const height = randNumBetween(2.0, 3.0);
+  const radius = randNumBetween(1.5, 2.5);
   const geometryString = `primitive: cylinder; height: ${height}; radius: ${radius};`;
 
   // Position
@@ -96,8 +96,7 @@ Shape.generateCylinder = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const opacity = randNumBetween(0.7, 0.9);
-  const materialString = `shader: flat; color: ${colour}; opacity: ${opacity};`;
+  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
 
   return new Shape(id, {
     geometry: geometryString,
