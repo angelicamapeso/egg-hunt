@@ -138,6 +138,7 @@ AFRAME.registerComponent("game", {
       const eggEntity = createShape(egg);
       eggEntity.setAttribute("static-body", "");
       eggEntity.setAttribute("data-id", egg.id);
+      eggEntity.classList.add("egg");
       this.eggs.push(eggEntity);
       this.el.appendChild(eggEntity);
     }
