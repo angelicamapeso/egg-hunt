@@ -12,6 +12,7 @@ class Game {
     */
     this.state = "lobby";
     this.envObjects = [];
+    this.eggs = [];
   }
 }
 
@@ -34,6 +35,7 @@ Game.prototype.removePlayer = function (socketID) {
 Game.prototype.reset = function () {
   this.state = "lobby";
   this.envObjects = [];
+  this.eggs = [];
 };
 
 module.exports = Game;
