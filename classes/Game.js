@@ -36,6 +36,9 @@ Game.prototype.reset = function () {
   this.state = "lobby";
   this.envObjects = [];
   this.eggs = [];
+  for (player of this.players) {
+    player.points = 0;
+  }
 };
 
 module.exports = Game;

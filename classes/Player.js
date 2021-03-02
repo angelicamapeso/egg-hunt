@@ -5,6 +5,8 @@ class Player {
     this.position = position;
     // rotation is player's quaternion rotation - [x, y, z, w]
     this.rotation = rotation;
+    // points
+    this.points = 0;
   }
 }
 
