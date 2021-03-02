@@ -104,7 +104,7 @@ AFRAME.registerComponent("game", {
 
     if (this.eggs && this.eggs.length > 0) {
       for (egg of this.eggs) {
-        egg.entity.remove();
+        egg.remove();
       }
       this.eggs = [];
     }
@@ -137,7 +137,8 @@ AFRAME.registerComponent("game", {
     for (egg of eggs) {
       const eggEntity = createShape(egg);
       eggEntity.setAttribute("static-body", "");
-      this.eggs.push({ id: egg.id, entity: eggEntity });
+      eggEntity.setAttribute("data-id", egg.id);
+      this.eggs.push(eggEntity);
       this.el.appendChild(eggEntity);
     }
   },
