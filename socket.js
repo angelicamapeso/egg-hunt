@@ -9,6 +9,7 @@ const {
   UPDATE_ROTATION,
   REMOVE_PLAYER,
   STATE_CHANGE,
+  EGG_GRAB,
 } = require("./socket-events.js");
 
 // The game state for the server
@@ -87,6 +88,20 @@ module.exports = function (io) {
         }
       } else {
         console.log("Invalid state sent!");
+      }
+    });
+
+    socket.on(EGG_GRAB, (id) => {
+      const eggID = parseInt(id);
+      if (game.eggs.find((egg) => egg.id === eggID)) {
+        // Remove egg from list
+        game.eggs = game.eggs.filter((egg) => egg.id !== eggID);
+        // give the point to the appropriate player
+        const grabber = game.players.find((player) => player.id === socket.id);
+        grabber.points += 1;
+
+        // tell other sockets that egg has been grabbed
+        io.to("game-room").emit(EGG_GRAB, eggID, grabber);
       }
     });
 
