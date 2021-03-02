@@ -11,6 +11,7 @@ class Game {
       "ended" = game has ended
     */
     this.state = "lobby";
+    this.envObjects = [];
   }
 }
 
@@ -28,6 +29,11 @@ Game.prototype.removePlayer = function (socketID) {
   const playerToRemove = this.players.find((player) => player.id === socketID);
   this.players = this.players.filter((player) => player.id !== socketID);
   return playerToRemove;
+};
+
+Game.prototype.reset = function () {
+  this.state = "lobby";
+  this.envObjects = [];
 };
 
 module.exports = Game;
