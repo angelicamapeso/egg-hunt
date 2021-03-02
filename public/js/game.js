@@ -137,6 +137,7 @@ AFRAME.registerComponent("game", {
     for (egg of eggs) {
       const eggEntity = createShape(egg);
       eggEntity.setAttribute("static-body", "");
+      eggEntity.setAttribute("egg", "");
       eggEntity.setAttribute("data-id", egg.id);
       eggEntity.classList.add("egg");
       this.eggs.push(eggEntity);
@@ -174,6 +175,27 @@ AFRAME.registerComponent("start-btn", {
 
   remove: function () {
     this.el.removeEventListener("click", this.handleClick);
+  },
+});
+
+/* Egg*/
+AFRAME.registerComponent("egg", {
+  init: function () {
+    this.player = document.getElementById("player");
+
+    // Get current position
+    this.currentPosition = new THREE.Vector3();
+    this.el.object3D.getWorldPosition(this.currentPosition);
+  },
+  // Detect when player is close
+  tick: function () {
+    let playerPosition = new THREE.Vector3();
+    this.player.object3D.getWorldPosition(playerPosition);
+
+    const distance = this.currentPosition.distanceTo(playerPosition);
+    if (distance <= 1.1) {
+      console.log("Egg collision!", this.el.dataset.id);
+    }
   },
 });
 
