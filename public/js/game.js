@@ -197,7 +197,7 @@ function createShape(shapeObj) {
   const attributes = Object.keys(shapeObj);
   const entity = document.createElement("a-entity");
   for (attribute of attributes) {
-    if (shapeObj[attribute]) {
+    if (attribute !== "id" && shapeObj[attribute]) {
       entity.setAttribute(attribute, shapeObj[attribute]);
     }
   }
