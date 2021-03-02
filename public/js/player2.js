@@ -11,6 +11,8 @@ AFRAME.registerComponent("player2", {
 
     this.el.setAttribute("material", { color: "#FFC65D" });
 
+    this.el.setAttribute("static-body", "");
+
     // Binding
     this.updatePosition = this.updatePosition.bind(this);
     this.updateRotation = this.updateRotation.bind(this);
