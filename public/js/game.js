@@ -29,6 +29,7 @@ AFRAME.registerComponent("game", {
     this.socket.on(REMOVE_PLAYER, this.removePlayer.bind(this));
     this.socket.on(FULL_ROOM, this.hideScene.bind(this));
     this.socket.on(STATE_CHANGE, this.handleStateChange.bind(this));
+    this.socket.on(EGG_GRAB, this.handleEggGrab.bind(this));
   },
 
   setGameObject: function (game) {
@@ -145,6 +146,24 @@ AFRAME.registerComponent("game", {
     }
   },
 
+  handleEggGrab: function (eggID, grabber) {
+    if (this.game && this.eggs) {
+      // Remove the egg
+      const eggToRemove = this.eggs.find(
+        (egg) => eggID === parseInt(egg.dataset.id)
+      );
+      eggToRemove.remove();
+      this.eggs = this.eggs.filter((egg) => parseInt(egg.dataset.id) !== eggID);
+      this.game.eggs = this.game.eggs.filter((egg) => egg.id !== eggID);
+
+      // Update game state
+      const playerToUpdate = this.game.players.find(
+        (player) => player.id === grabber.id
+      );
+      playerToUpdate.points = grabber.points;
+    }
+  },
+
   // hide scene - used when max players reached
   hideScene: function () {
     this.el.style.display = "none";
@@ -194,7 +213,7 @@ AFRAME.registerComponent("egg", {
 
     const distance = this.currentPosition.distanceTo(playerPosition);
     if (distance <= 1.1) {
-      console.log("Egg collision!", this.el.dataset.id);
+      socket.emit(EGG_GRAB, this.el.dataset.id);
     }
   },
 });
