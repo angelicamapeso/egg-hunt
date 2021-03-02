@@ -67,7 +67,7 @@ AFRAME.registerComponent("game", {
     }
   },
 
-  handleStateChange: function (state, envObjects) {
+  handleStateChange: function (state, envObjects, eggs) {
     if (this.game) {
       this.game.state = state;
       console.log("State change", state);
@@ -80,7 +80,7 @@ AFRAME.registerComponent("game", {
           this.handleReadyState();
           break;
         case "playing":
-          this.handlePlayingState(envObjects);
+          this.handlePlayingState(envObjects, eggs);
           break;
         default:
           console.log("Invalid state entered!");
@@ -90,6 +90,7 @@ AFRAME.registerComponent("game", {
 
   handleLobbyState: function () {
     this.game.envObjects = [];
+    this.game.eggs = [];
 
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
@@ -100,6 +101,13 @@ AFRAME.registerComponent("game", {
       }
       this.envObjects = [];
     }
+
+    if (this.eggs && this.eggs.length > 0) {
+      for (egg of this.eggs) {
+        egg.entity.remove();
+      }
+      this.eggs = [];
+    }
   },
 
   handleReadyState: function () {
@@ -107,25 +115,30 @@ AFRAME.registerComponent("game", {
     showElement(this.startBtn);
   },
 
-  handlePlayingState: function (envObjects) {
+  handlePlayingState: function (envObjects, eggs) {
     // update game state
     this.game.envObjects = envObjects;
-    this.envObjects = [];
+    this.envObjects = []; // element references
+
+    this.game.eggs = eggs;
+    this.eggs = []; // element references
 
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
 
     // Create environment objects
     for (object of envObjects) {
-      const attributes = Object.keys(object);
-      const entity = document.createElement("a-entity");
-      for (attribute of attributes) {
-        if (object[attribute]) {
-          entity.setAttribute(attribute, object[attribute]);
-        }
-      }
+      const entity = createShape(object);
+      entity.setAttribute("dynamic-body", "");
       this.envObjects.push(entity);
       this.el.appendChild(entity);
+    }
+
+    for (egg of eggs) {
+      const eggEntity = createShape(egg);
+      eggEntity.setAttribute("static-body", "");
+      this.eggs.push({ id: egg.id, entity: eggEntity });
+      this.el.appendChild(eggEntity);
     }
   },
 
@@ -176,4 +189,16 @@ function showElement(element) {
   if (element.dataset.clickable) {
     element.classList.add("clickable");
   }
+}
+
+/* used to render shape from Shape.js */
+function createShape(shapeObj) {
+  const attributes = Object.keys(shapeObj);
+  const entity = document.createElement("a-entity");
+  for (attribute of attributes) {
+    if (shapeObj[attribute]) {
+      entity.setAttribute(attribute, shapeObj[attribute]);
+    }
+  }
+  return entity;
 }
