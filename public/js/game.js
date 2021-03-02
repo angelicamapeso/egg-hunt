@@ -67,7 +67,7 @@ AFRAME.registerComponent("game", {
     }
   },
 
-  handleStateChange: function (state) {
+  handleStateChange: function (state, envObjects) {
     if (this.game) {
       this.game.state = state;
       console.log("State change", state);
@@ -80,7 +80,7 @@ AFRAME.registerComponent("game", {
           this.handleReadyState();
           break;
         case "playing":
-          this.handlePlayingState();
+          this.handlePlayingState(envObjects);
           break;
         default:
           console.log("Invalid state entered!");
@@ -89,8 +89,17 @@ AFRAME.registerComponent("game", {
   },
 
   handleLobbyState: function () {
+    this.game.envObjects = [];
+
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
+
+    if (this.envObjects && this.envObjects.length > 0) {
+      for (object of this.envObjects) {
+        object.remove();
+      }
+      this.envObjects = [];
+    }
   },
 
   handleReadyState: function () {
@@ -98,9 +107,26 @@ AFRAME.registerComponent("game", {
     showElement(this.startBtn);
   },
 
-  handlePlayingState: function () {
+  handlePlayingState: function (envObjects) {
+    // update game state
+    this.game.envObjects = envObjects;
+    this.envObjects = [];
+
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
+
+    // Create environment objects
+    for (object of envObjects) {
+      const attributes = Object.keys(object);
+      const entity = document.createElement("a-entity");
+      for (attribute of attributes) {
+        if (object[attribute]) {
+          entity.setAttribute(attribute, object[attribute]);
+        }
+      }
+      this.envObjects.push(entity);
+      this.el.appendChild(entity);
+    }
   },
 
   // hide scene - used when max players reached
