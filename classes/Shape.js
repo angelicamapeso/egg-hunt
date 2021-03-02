@@ -12,7 +12,6 @@ class Shape {
 Shape.colours = ["#4CC3D9", "#EF2D5E", "#FFC65D"];
 
 Shape.availableShapes = ["cube", "sphere", "cylinder"];
-Shape.opacitySetting = 0.7;
 
 Shape.getRandColour = function () {
   return Shape.colours[Math.floor(Math.random() * Shape.colours.length)];
@@ -49,7 +48,8 @@ Shape.generateCube = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
+  const opacity = randNumBetween(0.7, 0.9);
+  const materialString = `shader: flat; color: ${colour}; opacity: ${opacity};`;
 
   return new Shape(id, {
     geometry: geometryString,
@@ -70,7 +70,8 @@ Shape.generateSphere = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
+  const opacity = randNumBetween(0.7, 0.9);
+  const materialString = `shader: flat; color: ${colour}; opacity: ${opacity};`;
 
   return new Shape(id, {
     geometry: geometryString,
@@ -95,7 +96,8 @@ Shape.generateCylinder = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
+  const opacity = randNumBetween(0.7, 0.9);
+  const materialString = `shader: flat; color: ${colour}; opacity: ${opacity};`;
 
   return new Shape(id, {
     geometry: geometryString,

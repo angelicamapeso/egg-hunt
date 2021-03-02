@@ -69,11 +69,12 @@ module.exports = function (io) {
         game.state = state;
         switch (game.state) {
           case "playing":
-            // generate random positions for "eggs"
-            // generate random positions for larger objects
-            // attach to game object, and send
+            // generate environment objects
             const envObjects = generateEnvObjects();
             game.envObjects = envObjects;
+
+            // generate eggs
+
             io.to("game-room").emit(STATE_CHANGE, "playing", envObjects);
             break;
           default:
