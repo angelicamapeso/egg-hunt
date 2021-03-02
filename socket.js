@@ -1,4 +1,5 @@
 const Game = require("./classes/Game");
+const Shape = require("./classes/Shape.js");
 const {
   FULL_ROOM,
   JOIN,
@@ -68,7 +69,12 @@ module.exports = function (io) {
         game.state = state;
         switch (game.state) {
           case "playing":
-            io.to("game-room").emit(STATE_CHANGE, "playing");
+            // generate random positions for "eggs"
+            // generate random positions for larger objects
+            // attach to game object, and send
+            const envObjects = generateEnvObjects();
+            game.envObjects = envObjects;
+            io.to("game-room").emit(STATE_CHANGE, "playing", envObjects);
             break;
           default:
             console.log("State not implemented!");
@@ -93,3 +99,13 @@ module.exports = function (io) {
     });
   });
 };
+
+/* Helper functions*/
+const ENV_OBJ_COUNT = 50;
+function generateEnvObjects() {
+  const shapeArray = [];
+  for (let i = 0; i < ENV_OBJ_COUNT; i++) {
+    shapeArray.push(Shape.generateRandomShape(i));
+  }
+  return shapeArray;
+}
