@@ -36,7 +36,7 @@ Shape.getRandomRot = function (minRotation, maxRotation) {
 
 Shape.generateCube = function (id) {
   // Geometry
-  const size = randNumBetween(1, 3.0);
+  const size = randNumBetween(4, 5.0);
   const geometryString = `primitive: box; width: ${size}; height: ${size}; depth: ${size};`;
 
   // Position
@@ -61,7 +61,7 @@ Shape.generateCube = function (id) {
 
 Shape.generateSphere = function (id) {
   // Geometry
-  const size = randNumBetween(0.8, 2);
+  const size = randNumBetween(1.0, 4.0);
   const geometryString = `primitive: sphere; radius: ${size};`;
 
   // Position
@@ -81,8 +81,8 @@ Shape.generateSphere = function (id) {
 
 Shape.generateCylinder = function (id) {
   // Geometry
-  const height = randNumBetween(1, 3.0);
-  const radius = randNumBetween(1, 2.5);
+  const height = randNumBetween(2.0, 4.0);
+  const radius = randNumBetween(1.5, 3.5);
   const geometryString = `primitive: cylinder; height: ${height}; radius: ${radius};`;
 
   // Position
