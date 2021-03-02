@@ -7,4 +7,5 @@ module.exports = {
   UPDATE_POSITION: "update-position",
   UPDATE_ROTATION: "update-rotation",
   STATE_CHANGE: "state-change",
+  EGG_GRAB: "egg-grab",
 };
