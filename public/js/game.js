@@ -265,8 +265,6 @@ AFRAME.registerComponent("egg", {
           : gameComponent.game.players.find(
               (player) => player.id !== socket.id
             );
-      // update points
-      grabber.points += 1;
 
       // hide egg and update local points right away
       gameComponent.handleEggGrab(this.el.dataset.id, grabber);
