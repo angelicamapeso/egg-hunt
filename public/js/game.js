@@ -210,6 +210,7 @@ AFRAME.registerComponent("start-btn", {
 AFRAME.registerComponent("egg", {
   init: function () {
     this.player = document.getElementById("player");
+    this.player2 = document.querySelector("[player2]");
 
     // Get current position
     this.currentPosition = new THREE.Vector3();
@@ -220,9 +221,36 @@ AFRAME.registerComponent("egg", {
     let playerPosition = new THREE.Vector3();
     this.player.object3D.getWorldPosition(playerPosition);
 
-    const distance = this.currentPosition.distanceTo(playerPosition);
-    if (distance <= 1.1) {
-      socket.emit(EGG_GRAB, this.el.dataset.id);
+    let player2Position = new THREE.Vector3();
+    this.player2.object3D.getWorldPosition(player2Position);
+
+    const distanceToPlayer = this.currentPosition.distanceTo(playerPosition);
+    const distanceToPlayer2 = this.currentPosition.distanceTo(player2Position);
+
+    const collisionThreshold = 2;
+
+    if (
+      distanceToPlayer <= collisionThreshold ||
+      distanceToPlayer2 <= collisionThreshold
+    ) {
+      const gameComponent = document.querySelector("[game]").components.game;
+
+      const grabber =
+        distanceToPlayer <= collisionThreshold
+          ? gameComponent.game.players.find((player) => player.id === socket.id)
+          : gameComponent.game.players.find(
+              (player) => player.id !== socket.id
+            );
+      // update points
+      grabber.points += 1;
+
+      // hide egg and update local points right away
+      gameComponent.handleEggGrab(this.el.dataset.id, grabber);
+
+      if (distanceToPlayer <= collisionThreshold) {
+        // send to server if this character grabbed egg
+        socket.emit(EGG_GRAB, this.el.dataset.id);
+      }
     }
   },
 });
