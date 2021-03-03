@@ -102,6 +102,9 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
 
+    // hide game ui
+    this.gameUI.style.display = "none";
+
     if (this.envObjects && this.envObjects.length > 0) {
       for (object of this.envObjects) {
         object.remove();
@@ -132,6 +135,13 @@ AFRAME.registerComponent("game", {
 
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
+
+    // show game ui
+    this.gameUI.style.display = "block";
+    const currentPlayer = this.getPlayer(this.game.players);
+    const player2 = this.getPlayer2(this.game.players);
+    this.playerPoints.textContent = currentPlayer.points;
+    this.player2Points.textContent = player2.points;
 
     // Create environment objects
     for (object of envObjects) {
@@ -174,6 +184,11 @@ AFRAME.registerComponent("game", {
       // Points haven't been updating yet, so update points
       if (playerToUpdate.points < grabber.points) {
         playerToUpdate.points = grabber.points;
+        if (playerToUpdate.id === socket.id) {
+          this.playerPoints.textContent = playerToUpdate.points;
+        } else {
+          this.player2Points.textContent = playerToUpdate.points;
+        }
       }
     }
   },
