@@ -22,6 +22,7 @@ AFRAME.registerComponent("game", {
     this.handleLobbyState = this.handleLobbyState.bind(this);
     this.handleReadyState = this.handleReadyState.bind(this);
     this.handlePlayingState = this.handlePlayingState.bind(this);
+    this.handleEggGrab = this.handleEggGrab.bind(this);
 
     // websocket listeners
     this.socket.on(GAME_OBJECT, this.setGameObject.bind(this));
@@ -29,7 +30,7 @@ AFRAME.registerComponent("game", {
     this.socket.on(REMOVE_PLAYER, this.removePlayer.bind(this));
     this.socket.on(FULL_ROOM, this.hideScene.bind(this));
     this.socket.on(STATE_CHANGE, this.handleStateChange.bind(this));
-    this.socket.on(EGG_GRAB, this.handleEggGrab.bind(this));
+    this.socket.on(EGG_GRAB, this.handleEggGrab);
   },
 
   setGameObject: function (game) {
