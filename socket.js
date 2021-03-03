@@ -116,7 +116,7 @@ module.exports = function (io) {
       socket.to("game-room").emit(REMOVE_PLAYER, removedPlayer);
 
       if (game.players.length < 2) {
-        game.reset();
+        game.reset("lobby");
         io.to("game-room").emit(STATE_CHANGE, "lobby");
       }
 

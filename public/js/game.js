@@ -75,7 +75,7 @@ AFRAME.registerComponent("game", {
     }
   },
 
-  handleStateChange: function (state, envObjects, eggs) {
+  handleStateChange: function (state, obj) {
     if (this.game) {
       this.game.state = state;
       console.log("State change", state);
@@ -88,7 +88,10 @@ AFRAME.registerComponent("game", {
           this.handleReadyState();
           break;
         case "playing":
-          this.handlePlayingState(envObjects, eggs);
+          this.handlePlayingState(obj);
+          break;
+        case "game-over":
+          this.handleGameOver(obj);
           break;
         default:
           console.log("Invalid state entered!");
@@ -114,15 +117,23 @@ AFRAME.registerComponent("game", {
     showElement(this.startBtn);
   },
 
-  handlePlayingState: function (envObjects, eggs) {
+  handlePlayingState: function (obj) {
     this.clearScene();
 
     // update game state
-    this.game.envObjects = envObjects;
-    this.envObjects = []; // element references
+    if (obj.envObjects) {
+      this.game.envObjects = obj.envObjects;
+      this.envObjects = []; // element references
+    } else {
+      throw new Error("Missing env objects on playing state!");
+    }
 
-    this.game.eggs = eggs;
-    this.eggs = []; // element references
+    if (obj.eggs) {
+      this.game.eggs = obj.eggs;
+      this.eggs = []; // element references
+    } else {
+      throw new Error("Missing egg objects on playing state!");
+    }
 
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
@@ -135,14 +146,14 @@ AFRAME.registerComponent("game", {
     this.player2Points.textContent = player2.points;
 
     // Create environment objects
-    for (object of envObjects) {
+    for (object of obj.envObjects) {
       const entity = createShape(object);
       entity.setAttribute("dynamic-body", "");
       this.envObjects.push(entity);
       this.el.appendChild(entity);
     }
 
-    for (egg of eggs) {
+    for (egg of obj.eggs) {
       const eggEntity = createShape(egg);
       eggEntity.setAttribute("static-body", "");
       eggEntity.setAttribute("egg", "");

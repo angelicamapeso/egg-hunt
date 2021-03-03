@@ -32,8 +32,8 @@ Game.prototype.removePlayer = function (socketID) {
   return playerToRemove;
 };
 
-Game.prototype.reset = function () {
-  this.state = "lobby";
+Game.prototype.reset = function (state) {
+  this.state = state;
   this.envObjects = [];
   this.eggs = [];
   for (player of this.players) {
