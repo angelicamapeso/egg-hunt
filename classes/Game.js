@@ -41,4 +41,14 @@ Game.prototype.reset = function (state) {
   }
 };
 
+Game.prototype.getWinner = function () {
+  let winner = this.players[0];
+  for (let i = 1; i < this.players.length; i++) {
+    if (player.points > winner.points) {
+      winner = player;
+    }
+  }
+  return winner;
+};
+
 module.exports = Game;
