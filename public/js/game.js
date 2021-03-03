@@ -28,6 +28,7 @@ AFRAME.registerComponent("game", {
     this.handleReadyState = this.handleReadyState.bind(this);
     this.handlePlayingState = this.handlePlayingState.bind(this);
     this.handleEggGrab = this.handleEggGrab.bind(this);
+    this.handleGameOver = this.handleGameOver.bind(this);
     this.clearScene = this.clearScene.bind(this);
 
     // websocket listeners
@@ -191,8 +192,16 @@ AFRAME.registerComponent("game", {
         } else {
           this.player2Points.textContent = playerToUpdate.points;
         }
+        if (this.game.state !== "game-over" && this.game.eggs.length === 0) {
+          this.game.state = "game-over";
+          socket.emit(STATE_CHANGE, "game-over");
+        }
       }
     }
+  },
+
+  handleGameOver: function (obj) {
+    console.log(obj.winner);
   },
 
   // hide scene - used when max players reached

@@ -65,11 +65,11 @@ module.exports = function (io) {
     });
 
     socket.on(STATE_CHANGE, (state) => {
-      const validStates = ["lobby", "ready", "playing"];
+      const validStates = ["lobby", "ready", "playing", "game-over"];
       if (validStates.includes(state)) {
-        game.state = state;
-        switch (game.state) {
+        switch (state) {
           case "playing":
+            game.state = state;
             // generate environment objects
             game.envObjects = generateEnvObjects();
 
@@ -80,12 +80,17 @@ module.exports = function (io) {
               player.points = 0;
             }
 
-            io.to("game-room").emit(
-              STATE_CHANGE,
-              "playing",
-              game.envObjects,
-              game.eggs
-            );
+            io.to("game-room").emit(STATE_CHANGE, "playing", {
+              envObjects: game.envObjects,
+              eggs: game.eggs,
+            });
+            break;
+          case "game-over":
+            if (game.state !== "game-over") {
+              const winner = game.getWinner();
+              io.to("game-room").emit(STATE_CHANGE, "game-over", { winner });
+              game.reset("game-over");
+            }
             break;
           default:
             console.log("State not implemented!");
