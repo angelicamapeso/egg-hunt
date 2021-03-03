@@ -28,6 +28,7 @@ AFRAME.registerComponent("game", {
     this.handleReadyState = this.handleReadyState.bind(this);
     this.handlePlayingState = this.handlePlayingState.bind(this);
     this.handleEggGrab = this.handleEggGrab.bind(this);
+    this.clearScene = this.clearScene.bind(this);
 
     // websocket listeners
     this.socket.on(GAME_OBJECT, this.setGameObject.bind(this));
@@ -105,19 +106,7 @@ AFRAME.registerComponent("game", {
     // hide game ui
     this.gameUI.style.display = "none";
 
-    if (this.envObjects && this.envObjects.length > 0) {
-      for (object of this.envObjects) {
-        object.remove();
-      }
-      this.envObjects = [];
-    }
-
-    if (this.eggs && this.eggs.length > 0) {
-      for (egg of this.eggs) {
-        egg.remove();
-      }
-      this.eggs = [];
-    }
+    this.clearScene();
   },
 
   handleReadyState: function () {
@@ -126,6 +115,8 @@ AFRAME.registerComponent("game", {
   },
 
   handlePlayingState: function (envObjects, eggs) {
+    this.clearScene();
+
     // update game state
     this.game.envObjects = envObjects;
     this.envObjects = []; // element references
@@ -196,6 +187,29 @@ AFRAME.registerComponent("game", {
   // hide scene - used when max players reached
   hideScene: function () {
     this.el.style.display = "none";
+  },
+
+  clearScene: function () {
+    if (this.envObjects && this.envObjects.length > 0) {
+      for (object of this.envObjects) {
+        object.remove();
+      }
+      this.envObjects = [];
+    }
+
+    if (this.eggs && this.eggs.length > 0) {
+      for (egg of this.eggs) {
+        egg.remove();
+      }
+      this.eggs = [];
+    }
+
+    // clear points
+    for (player of this.game.players) {
+      player.points = 0;
+    }
+    this.playerPoints.textContent = 0;
+    this.player2Points.textContent = 0;
   },
 
   getPlayer: function (players) {

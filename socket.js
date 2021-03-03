@@ -76,6 +76,10 @@ module.exports = function (io) {
             // generate eggs
             game.eggs = generateEggs();
 
+            for (player of game.players) {
+              player.points = 0;
+            }
+
             io.to("game-room").emit(
               STATE_CHANGE,
               "playing",
