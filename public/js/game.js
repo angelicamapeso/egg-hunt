@@ -22,6 +22,8 @@ AFRAME.registerComponent("game", {
     this.gameUI = document.getElementById("game-ui");
     this.playerPoints = document.getElementById("player-points");
     this.player2Points = document.getElementById("player2-points");
+    this.winner = document.getElementById("winner");
+    this.winnerText = document.getElementById("winner-text");
 
     // Binding
     this.handleLobbyState = this.handleLobbyState.bind(this);
@@ -101,16 +103,10 @@ AFRAME.registerComponent("game", {
   },
 
   handleLobbyState: function () {
-    this.game.envObjects = [];
-    this.game.eggs = [];
-
-    hideElement(this.startBtnGrp);
-    hideElement(this.startBtn);
+    this.clearScene();
 
     // hide game ui
     this.gameUI.style.display = "none";
-
-    this.clearScene();
   },
 
   handleReadyState: function () {
@@ -201,7 +197,11 @@ AFRAME.registerComponent("game", {
   },
 
   handleGameOver: function (obj) {
-    console.log(obj.winner);
+    this.winner.style.display = "inline-block";
+    this.winnerText.textContent =
+      obj.winner.id === socket.id ? "You won!" : "You lost!";
+    showElement(this.startBtnGrp);
+    showElement(this.startBtn);
   },
 
   // hide scene - used when max players reached
@@ -210,6 +210,9 @@ AFRAME.registerComponent("game", {
   },
 
   clearScene: function () {
+    this.game.envObjects = [];
+    this.game.eggs = [];
+
     if (this.envObjects && this.envObjects.length > 0) {
       for (object of this.envObjects) {
         object.remove();
@@ -230,6 +233,11 @@ AFRAME.registerComponent("game", {
     }
     this.playerPoints.textContent = 0;
     this.player2Points.textContent = 0;
+
+    // clear winner
+    this.winner.style.display = "none";
+    hideElement(this.startBtnGrp);
+    hideElement(this.startBtn);
   },
 
   getPlayer: function (players) {
