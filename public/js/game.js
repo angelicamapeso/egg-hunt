@@ -18,6 +18,11 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
 
+    // reference to point ui
+    this.gameUI = document.getElementById("game-ui");
+    this.playerPoints = document.getElementById("player-points");
+    this.player2Points = document.getElementById("player2-points");
+
     // Binding
     this.handleLobbyState = this.handleLobbyState.bind(this);
     this.handleReadyState = this.handleReadyState.bind(this);
