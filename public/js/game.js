@@ -198,6 +198,10 @@ AFRAME.registerComponent("game", {
     this.el.style.display = "none";
   },
 
+  getPlayer: function (players) {
+    return players.find((player) => player.id === socket.id);
+  },
+
   // Helper functions
   getPlayer2: function (players) {
     return players.find((player) => player.id !== socket.id);
