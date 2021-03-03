@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="css/style.css">
   
   <!--A-Frame Script-->
   <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
@@ -22,6 +24,13 @@
   <title>Hide and Seek</title>
 </head>
 <body>
+  <section id="game-ui">
+    <div id="points">
+      <p id="player-point-title">Eggs Collected: <span id="player-points">0</span></p>
+      <p id="player2-point-title">Opponent Collected: <span id="player-points">0</span></p>
+    </div>
+  </section>
+
   <a-scene game physics="debug: true">
     <a-entity id="player" camera static-body geometry="primitive: box;" player position="0 1 0" look-controls wasd-controls>
       <a-entity cursor="rayOrigin:mouse; fuse:false;" raycaster="far:20; interval:200; objects:.clickable;"></a-entity>
