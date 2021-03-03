@@ -152,15 +152,23 @@ AFRAME.registerComponent("game", {
       const eggToRemove = this.eggs.find(
         (egg) => eggID === parseInt(egg.dataset.id)
       );
-      eggToRemove.remove();
-      this.eggs = this.eggs.filter((egg) => parseInt(egg.dataset.id) !== eggID);
-      this.game.eggs = this.game.eggs.filter((egg) => egg.id !== eggID);
+      // Egg hasn't been removed yet
+      if (eggToRemove) {
+        eggToRemove.remove();
+        this.eggs = this.eggs.filter(
+          (egg) => parseInt(egg.dataset.id) !== eggID
+        );
+        this.game.eggs = this.game.eggs.filter((egg) => egg.id !== eggID);
+      }
 
       // Update game state
       const playerToUpdate = this.game.players.find(
         (player) => player.id === grabber.id
       );
-      playerToUpdate.points = grabber.points;
+      // Points haven't been updating yet, so update points
+      if (playerToUpdate.points < grabber.points) {
+        playerToUpdate.points = grabber.points;
+      }
     }
   },
 
