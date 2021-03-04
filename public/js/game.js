@@ -55,7 +55,7 @@ AFRAME.registerComponent("game", {
     this.game = game;
     // there are now two players, so must draw the other player upon joining
     if (this.game.players.length > 1) {
-      const otherPlayer = this.getPlayer2(game.players);
+      const otherPlayer = this.getPlayer2();
       this.createPlayer2(otherPlayer.position);
     }
   },
@@ -146,8 +146,8 @@ AFRAME.registerComponent("game", {
 
     // show game ui
     this.gameUI.style.display = "block";
-    const currentPlayer = this.getPlayer(this.game.players);
-    const player2 = this.getPlayer2(this.game.players);
+    const currentPlayer = this.getPlayer();
+    const player2 = this.getPlayer2();
     this.playerPoints.textContent = currentPlayer.points;
     this.player2Points.textContent = player2.points;
 
@@ -221,13 +221,13 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtn);
   },
 
-  getPlayer: function (players) {
-    return players.find((player) => player.id === socket.id);
+  getPlayer: function () {
+    return this.game.players.find((player) => player.id === socket.id);
   },
 
   // Helper functions
-  getPlayer2: function (players) {
-    return players.find((player) => player.id !== socket.id);
+  getPlayer2: function () {
+    return this.game.players.find((player) => player.id !== socket.id);
   },
 
   createPlayer2: function ([x, y, z]) {
@@ -330,8 +330,8 @@ AFRAME.registerComponent("egg", {
 
       const grabber =
         distanceToPlayer <= collisionThreshold
-          ? gameComponent.getPlayer(gameComponent.game.players)
-          : gameComponent.getPlayer2(gameComponent.game.players);
+          ? gameComponent.getPlayer()
+          : gameComponent.getPlayer2();
       const updatedGrabber = { ...grabber, points: grabber.points + 1 };
 
       // hide egg and update local points right away
