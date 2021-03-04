@@ -18,6 +18,9 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
 
+    // to ensure that points updated only once
+    this.lastEggRemoved = null;
+
     // reference to point ui
     this.gameUI = document.getElementById("game-ui");
     this.playerPoints = document.getElementById("player-points");
@@ -168,8 +171,10 @@ AFRAME.registerComponent("game", {
   },
 
   handleEggGrab: function (eggID, grabber) {
+    if (this.lastEggRemoved !== eggID) {
       this.updatePoints(grabber);
       this.removeEgg(eggID);
+    }
   },
 
   handleGameOver: function (obj) {
