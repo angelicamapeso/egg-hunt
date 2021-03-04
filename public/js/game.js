@@ -275,7 +275,6 @@ AFRAME.registerComponent("game", {
 
       // update points UI
       if (playerToUpdate.id === socket.id) {
-        console.log(this.playerPoints);
         this.playerPoints.textContent = playerToUpdate.points;
       } else {
         this.player2Points.textContent = playerToUpdate.points;
