@@ -31,7 +31,13 @@ AFRAME.registerComponent("game", {
     this.handlePlayingState = this.handlePlayingState.bind(this);
     this.handleEggGrab = this.handleEggGrab.bind(this);
     this.handleGameOver = this.handleGameOver.bind(this);
+
+    // Binding helper functions
     this.clearScene = this.clearScene.bind(this);
+    this.removeEgg = this.removeEgg.bind(this);
+    this.updatePoints = this.updatePoints.bind(this);
+    this.getPlayer = this.getPlayer.bind(this);
+    this.getPlayer2 = this.getPlayer2.bind(this);
 
     // websocket listeners
     this.socket.on(GAME_OBJECT, this.setGameObject.bind(this));
@@ -162,38 +168,8 @@ AFRAME.registerComponent("game", {
   },
 
   handleEggGrab: function (eggID, grabber) {
-    if (this.game && this.eggs) {
-      // Remove the egg
-      const eggToRemove = this.eggs.find(
-        (egg) => eggID === parseInt(egg.dataset.id)
-      );
-      // Egg hasn't been removed yet
-      if (eggToRemove) {
-        eggToRemove.remove();
-        this.eggs = this.eggs.filter(
-          (egg) => parseInt(egg.dataset.id) !== eggID
-        );
-        this.game.eggs = this.game.eggs.filter((egg) => egg.id !== eggID);
-      }
-
-      // Update game state
-      const playerToUpdate = this.game.players.find(
-        (player) => player.id === grabber.id
-      );
-      // Points haven't been updating yet, so update points
-      if (playerToUpdate.points < grabber.points) {
-        playerToUpdate.points = grabber.points;
-        if (playerToUpdate.id === socket.id) {
-          this.playerPoints.textContent = playerToUpdate.points;
-        } else {
-          this.player2Points.textContent = playerToUpdate.points;
-        }
-        if (this.game.state !== "game-over" && this.game.eggs.length === 0) {
-          this.game.state = "game-over";
-          socket.emit(STATE_CHANGE, "game-over");
-        }
-      }
-    }
+      this.updatePoints(grabber);
+      this.removeEgg(eggID);
   },
 
   handleGameOver: function (obj) {
@@ -255,6 +231,52 @@ AFRAME.registerComponent("game", {
     this.player2.object3D.position.set(x, y, z);
     this.el.appendChild(this.player2);
   },
+
+  removeEgg: function (eggID) {
+    if (this.game && this.eggs) {
+      const eggIDint = parseInt(eggID);
+      // Remove the egg
+      const eggToRemove = this.eggs.find(
+        (egg) => eggIDint === parseInt(egg.dataset.id)
+      );
+      // Egg hasn't been removed yet
+      if (eggToRemove) {
+        eggToRemove.remove();
+        this.eggs = this.eggs.filter(
+          (egg) => parseInt(egg.dataset.id) !== eggIDint
+        );
+        this.game.eggs = this.game.eggs.filter((egg) => egg.id !== eggIDint);
+      }
+
+      this.lastEggRemoved = eggIDint;
+
+      // check if game over after removing egg
+      if (this.game.state !== "game-over" && this.game.eggs.length === 0) {
+        this.game.state = "game-over";
+        socket.emit(STATE_CHANGE, "game-over");
+      }
+    }
+  },
+
+  updatePoints: function (grabber) {
+    // Update game state
+    const playerToUpdate = this.game.players.find(
+      (player) => player.id === grabber.id
+    );
+
+    // Points haven't been updating yet, so update points
+    if (playerToUpdate.points < grabber.points) {
+      playerToUpdate.points = grabber.points;
+
+      // update points UI
+      if (playerToUpdate.id === socket.id) {
+        console.log(this.playerPoints);
+        this.playerPoints.textContent = playerToUpdate.points;
+      } else {
+        this.player2Points.textContent = playerToUpdate.points;
+      }
+    }
+  },
 });
 
 /* Start button*/
@@ -303,14 +325,15 @@ AFRAME.registerComponent("egg", {
 
       const grabber =
         distanceToPlayer <= collisionThreshold
-          ? gameComponent.game.players.find((player) => player.id === socket.id)
-          : gameComponent.game.players.find(
-              (player) => player.id !== socket.id
-            );
+          ? gameComponent.getPlayer(gameComponent.game.players)
+          : gameComponent.getPlayer2(gameComponent.game.players);
+      const updatedGrabber = { ...grabber, points: grabber.points + 1 };
 
       // hide egg and update local points right away
-      gameComponent.handleEggGrab(this.el.dataset.id, grabber);
+      gameComponent.handleEggGrab(this.el.dataset.id, updatedGrabber);
 
+      // fallback if for some reason the egg wasn't removed or points
+      // not updated fast enough
       if (distanceToPlayer <= collisionThreshold) {
         // send to server if this character grabbed egg
         socket.emit(EGG_GRAB, this.el.dataset.id);
