@@ -110,10 +110,10 @@ AFRAME.registerComponent("game", {
           this.handleReadyState();
           break;
         case "start-play":
-          this.handleStartPlayState();
+          this.handleStartPlayState(obj);
           break;
         case "playing":
-          this.handlePlayingState(obj);
+          this.handlePlayingState();
           break;
         case "game-over":
           this.handleGameOver(obj);
@@ -145,7 +145,9 @@ AFRAME.registerComponent("game", {
     showElement(this.startBtn);
   },
 
-  handleStartPlayState: function () {
+  handleStartPlayState: function (obj) {
+    this.clearScene();
+
     this.gameUI.style.display = "none";
     this.countdownToStart.style.display = "block";
     this.toStartCounter.textContent = "";
@@ -154,22 +156,6 @@ AFRAME.registerComponent("game", {
     this.cameraRig.removeAttribute("look-controls");
     this.cameraRig.object3D.position.set(0, 0, 0);
     this.cameraRig.object3D.rotation.set(0, 0, 0);
-  },
-
-  handlePlayingState: function (obj) {
-    this.toStartCounter.textContent = "GO!";
-    setTimeout(() => {
-      this.countdownToStart.style.display = "none";
-      this.gameUI.style.display = "block";
-      this.middleUI.style.display = "inline-block";
-      this.winnerText.style.display = "none";
-    }, 1000);
-
-    this.eggsLeft.textContent = obj.eggs.length;
-    this.cameraRig.setAttribute("movement-controls", this.cameraRigAttr);
-    this.cameraRig.setAttribute("look-controls", "");
-
-    this.clearScene();
 
     // update game state
     if (obj.envObjects) {
@@ -189,12 +175,6 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
 
-    // show game ui
-    const currentPlayer = this.getPlayer();
-    const player2 = this.getPlayer2();
-    this.playerPoints.textContent = currentPlayer.points;
-    this.player2Points.textContent = player2.points;
-
     // Create environment objects
     for (object of obj.envObjects) {
       const entity = createShape(object);
@@ -212,6 +192,23 @@ AFRAME.registerComponent("game", {
       this.eggs.push(eggEntity);
       this.el.appendChild(eggEntity);
     }
+  },
+
+  handlePlayingState: function () {
+    this.countdownToStart.style.display = "none";
+    this.gameUI.style.display = "block";
+    this.middleUI.style.display = "inline-block";
+    this.winnerText.style.display = "none";
+
+    this.eggsLeft.textContent = this.eggs.length;
+    this.cameraRig.setAttribute("movement-controls", this.cameraRigAttr);
+    this.cameraRig.setAttribute("look-controls", "");
+
+    // show game ui
+    const currentPlayer = this.getPlayer();
+    const player2 = this.getPlayer2();
+    this.playerPoints.textContent = currentPlayer.points;
+    this.player2Points.textContent = player2.points;
   },
 
   handleEggGrab: function (eggID, grabber) {

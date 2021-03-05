@@ -124,7 +124,21 @@ module.exports = function (io) {
 
     /* Game state helper functions */
     function handleStartPlay() {
-      io.to("game-room").emit(STATE_CHANGE, "start-play");
+      // generate environment objects
+      game.envObjects = generateEnvObjects();
+
+      // generate eggs
+      game.eggs = generateEggs();
+
+      for (player of game.players) {
+        player.points = 0;
+      }
+
+      io.to("game-room").emit(STATE_CHANGE, "start-play", {
+        envObjects: game.envObjects,
+        eggs: game.eggs,
+      });
+
       const countdownFrom = 3;
       io.to("game-room").emit(TIME_CHANGE, countdownFrom);
       game.startInterval(
@@ -139,15 +153,6 @@ module.exports = function (io) {
 
     function handlePlaying() {
       game.state = "playing";
-      // generate environment objects
-      game.envObjects = generateEnvObjects();
-
-      // generate eggs
-      game.eggs = generateEggs();
-
-      for (player of game.players) {
-        player.points = 0;
-      }
 
       const countdownFrom = 40;
       game.startInterval(
@@ -159,10 +164,7 @@ module.exports = function (io) {
         handleGameOver
       );
 
-      io.to("game-room").emit(STATE_CHANGE, "playing", {
-        envObjects: game.envObjects,
-        eggs: game.eggs,
-      });
+      io.to("game-room").emit(STATE_CHANGE, "playing");
     }
 
     function handleGameOver() {
