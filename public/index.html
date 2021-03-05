@@ -11,6 +11,8 @@
   <script src="https://aframe.io/releases/1.1.0/aframe.min.js"></script>
   <!--A-Frame physics-->
   <script src="https://cdn.jsdelivr.net/gh/n5ro/aframe-physics-system@v4.0.1/dist/aframe-physics-system.min.js"></script>
+  <!--A-Frame move controls-->
+  <script src="https://cdn.jsdelivr.net/gh/donmccurdy/aframe-extras@v6.1.1/dist/aframe-extras.min.js"></script>
 
   <!--Websocket client-->
   <script src="/socket.io/socket.io.js"></script>
@@ -39,8 +41,12 @@
   </section>
 
   <a-scene game physics="debug: true">
-    <a-entity id="player" camera static-body geometry="primitive: box;" player position="0 1 0" look-controls wasd-controls>
-      <a-entity cursor="rayOrigin:mouse; fuse:false;" raycaster="far:20; interval:200; objects:.clickable;"></a-entity>
+    <a-entity id="rig"
+      movement-controls="speed: 0.5;"
+      look-controls>
+      <a-entity id="player" camera static-body geometry="primitive: box;" player position="0 1 0">
+        <a-entity cursor="rayOrigin:mouse; fuse:false;" raycaster="far:20; interval:200; objects:.clickable;"></a-entity>
+      </a-entity>
     </a-entity>
 
     <a-entity id="start-game-grp">
