@@ -154,17 +154,20 @@ module.exports = function (io) {
     function handlePlaying() {
       game.state = "playing";
 
+      // change playing state
+      io.to("game-room").emit(STATE_CHANGE, "playing");
+
+      // give new countdown
       const countdownFrom = 40;
+      io.to("game-room").emit(TIME_CHANGE, countdownFrom);
       game.startInterval(
         1000,
-        countdownFrom,
+        countdownFrom - 1,
         () => {
           io.to("game-room").emit(TIME_CHANGE, game.time);
         },
         handleGameOver
       );
-
-      io.to("game-room").emit(STATE_CHANGE, "playing");
     }
 
     function handleGameOver() {
