@@ -50,7 +50,7 @@ Shape.generateCube = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
+  const materialString = `shader: flat; color: ${colour};`;
 
   return new Shape(id, {
     geometry: geometryString,
@@ -71,7 +71,7 @@ Shape.generateSphere = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
+  const materialString = `shader: flat; color: ${colour};`;
 
   return new Shape(id, {
     geometry: geometryString,
@@ -96,7 +96,7 @@ Shape.generateCylinder = function (id) {
 
   // Material
   const colour = Shape.getRandColour();
-  const materialString = `shader: flat; color: ${colour}; opacity: ${Shape.opacitySetting};`;
+  const materialString = `shader: flat; color: ${colour};`;
 
   return new Shape(id, {
     geometry: geometryString,
