@@ -1,5 +1,7 @@
 # Egg Hunt
 
+![Egg Hunt Preview](./img/egg_hunt_preview.png)
+
 Face against a friend in this timed game of egg-hunting!
 
 There are 15 eggs on the map with 40 seconds on the clock. The game ends when all eggs have been collected. The player who collects the most eggs wins, but if there are any eggs remaining after the time runs out, both players lose!
