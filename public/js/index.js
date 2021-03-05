@@ -11,3 +11,4 @@ const UPDATE_POSITION = "update-position";
 const UPDATE_ROTATION = "update-rotation";
 const STATE_CHANGE = "state-change";
 const EGG_GRAB = "egg-grab";
+const TIME_CHANGE = "time-change";
