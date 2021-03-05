@@ -1,5 +1,5 @@
 {
-  "name": "hide-and-seek",
+  "name": "egg-hunt",
   "version": "1.0.0",
   "description": "Play hide and seek using colours to hide",
   "main": "index.js",
