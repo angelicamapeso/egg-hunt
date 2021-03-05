@@ -77,57 +77,14 @@ module.exports = function (io) {
         switch (state) {
           case "start-play":
             game.state = state;
-            io.to("game-room").emit(STATE_CHANGE, "start-play");
-            const countdownFrom = 3;
-            io.to("game-room").emit(TIME_CHANGE, countdownFrom);
-            game.startInterval(
-              1000,
-              countdownFrom - 1,
-              () => {
-                io.to("game-room").emit(TIME_CHANGE, game.time);
-              },
-              () => {
-                game.state = state;
-                // generate environment objects
-                game.envObjects = generateEnvObjects();
-
-                // generate eggs
-                game.eggs = generateEggs();
-
-                for (player of game.players) {
-                  player.points = 0;
-                }
-
-                io.to("game-room").emit(STATE_CHANGE, "playing", {
-                  envObjects: game.envObjects,
-                  eggs: game.eggs,
-                });
-              }
-            );
+            handleStartPlay();
             break;
           case "playing":
             game.state = state;
-            // generate environment objects
-            game.envObjects = generateEnvObjects();
-
-            // generate eggs
-            game.eggs = generateEggs();
-
-            for (player of game.players) {
-              player.points = 0;
-            }
-
-            io.to("game-room").emit(STATE_CHANGE, "playing", {
-              envObjects: game.envObjects,
-              eggs: game.eggs,
-            });
+            handlePlaying();
             break;
           case "game-over":
-            if (game.state !== "game-over") {
-              const winner = game.getWinner();
-              io.to("game-room").emit(STATE_CHANGE, "game-over", { winner });
-              game.reset("game-over");
-            }
+            handleGameOver();
             break;
           default:
             console.log("State not implemented!");
@@ -164,6 +121,61 @@ module.exports = function (io) {
 
       console.log("Removed player:\n", game);
     });
+
+    /* Game state helper functions */
+    function handleStartPlay() {
+      io.to("game-room").emit(STATE_CHANGE, "start-play");
+      const countdownFrom = 3;
+      io.to("game-room").emit(TIME_CHANGE, countdownFrom);
+      game.startInterval(
+        1000,
+        countdownFrom - 1,
+        () => {
+          io.to("game-room").emit(TIME_CHANGE, game.time);
+        },
+        () => {
+          // generate environment objects
+          game.envObjects = generateEnvObjects();
+
+          // generate eggs
+          game.eggs = generateEggs();
+
+          for (player of game.players) {
+            player.points = 0;
+          }
+
+          io.to("game-room").emit(STATE_CHANGE, "playing", {
+            envObjects: game.envObjects,
+            eggs: game.eggs,
+          });
+        }
+      );
+    }
+
+    function handlePlaying() {
+      // generate environment objects
+      game.envObjects = generateEnvObjects();
+
+      // generate eggs
+      game.eggs = generateEggs();
+
+      for (player of game.players) {
+        player.points = 0;
+      }
+
+      io.to("game-room").emit(STATE_CHANGE, "playing", {
+        envObjects: game.envObjects,
+        eggs: game.eggs,
+      });
+    }
+
+    function handleGameOver() {
+      if (game.state !== "game-over") {
+        const winner = game.getWinner();
+        io.to("game-room").emit(STATE_CHANGE, "game-over", { winner });
+        game.reset("game-over");
+      }
+    }
   });
 };
 
