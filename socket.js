@@ -133,26 +133,12 @@ module.exports = function (io) {
         () => {
           io.to("game-room").emit(TIME_CHANGE, game.time);
         },
-        () => {
-          // generate environment objects
-          game.envObjects = generateEnvObjects();
-
-          // generate eggs
-          game.eggs = generateEggs();
-
-          for (player of game.players) {
-            player.points = 0;
-          }
-
-          io.to("game-room").emit(STATE_CHANGE, "playing", {
-            envObjects: game.envObjects,
-            eggs: game.eggs,
-          });
-        }
+        handlePlaying
       );
     }
 
     function handlePlaying() {
+      game.state = "playing";
       // generate environment objects
       game.envObjects = generateEnvObjects();
 
