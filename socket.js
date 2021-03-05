@@ -188,7 +188,7 @@ module.exports = function (io) {
 };
 
 /* Helper functions*/
-const ENV_OBJ_COUNT = 40;
+const ENV_OBJ_COUNT = 30;
 function generateEnvObjects() {
   const shapeArray = [];
   for (let i = 0; i < ENV_OBJ_COUNT; i++) {
@@ -197,7 +197,7 @@ function generateEnvObjects() {
   return shapeArray;
 }
 
-const EGG_COUNT = 20;
+const EGG_COUNT = 15;
 function generateEggs() {
   const eggArray = [];
   for (let i = 0; i < EGG_COUNT; i++) {
