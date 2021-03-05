@@ -53,7 +53,12 @@
 
     <a-entity id="start-game-grp">
       <a-box color="#4CC3D9" position="0 0.25 -2" width="0.5" depth="0.5" height="0.5"></a-box>
-      <a-cylinder start-btn id="start-game-btn" class="clickable" color="#EF2D5E" position="0 0.3 -2" radius="0.1" height="0.5"></a-cylinder>
+      <a-cylinder start-btn id="start-game-btn" class="clickable" color="#EF2D5E" position="0 0.35 -2" radius="0.1" height="0.5"
+        animation__mouseenter="property: position; to: 0 0.33 -2; dur:200; startEvents: mouseenter;"
+        animation__mouseleave="property: position; to: 0 0.35 -2; dur:200; startEvents: mouseleave;"
+        animation__click="property: position; to: 0 0.3 -2; dur:150; easing: easeOutQuad; startEvents: click;"
+        animation__pressLeave="property: position; to: 0 0.35 -2; dur:150; startEvents: animationcomplete__click;"
+        ></a-cylinder>
     </a-entity>
 
     <a-plane static-body position="0 0 0" rotation="-90 0 0" width="75" height="75" color="#7BC8A4" material="shader:flat;"></a-plane>
