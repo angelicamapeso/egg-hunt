@@ -25,7 +25,7 @@ AFRAME.registerComponent("game", {
     this.gameUI = document.getElementById("game-ui");
     this.playerPoints = document.getElementById("player-points");
     this.player2Points = document.getElementById("player2-points");
-    this.winner = document.getElementById("winner");
+    this.middleUI = document.getElementById("middle-ui");
     this.winnerText = document.getElementById("winner-text");
     this.countdownToStart = document.getElementById("countdown-to-start");
     this.toStartCounter = document.getElementById("to-start-counter");
@@ -216,7 +216,7 @@ AFRAME.registerComponent("game", {
   },
 
   handleGameOver: function (obj) {
-    this.winner.style.display = "inline-block";
+    this.middleUI.style.display = "inline-block";
 
     if (!obj.winner) {
       this.winnerText.textContent = "Ran out of time!";
@@ -264,7 +264,7 @@ AFRAME.registerComponent("game", {
     this.player2Points.textContent = 0;
 
     // clear winner
-    this.winner.style.display = "none";
+    this.middleUI.style.display = "none";
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
   },
