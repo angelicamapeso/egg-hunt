@@ -149,6 +149,16 @@ module.exports = function (io) {
         player.points = 0;
       }
 
+      const countdownFrom = 40;
+      game.startInterval(
+        1000,
+        countdownFrom,
+        () => {
+          io.to("game-room").emit(TIME_CHANGE, game.time);
+        },
+        handleGameOver
+      );
+
       io.to("game-room").emit(STATE_CHANGE, "playing", {
         envObjects: game.envObjects,
         eggs: game.eggs,
@@ -157,8 +167,15 @@ module.exports = function (io) {
 
     function handleGameOver() {
       if (game.state !== "game-over") {
-        const winner = game.getWinner();
-        io.to("game-room").emit(STATE_CHANGE, "game-over", { winner });
+        if (game.time !== 0) {
+          game.time = 0;
+          game.interval = clearInterval(game.interval);
+
+          const winner = game.getWinner();
+          io.to("game-room").emit(STATE_CHANGE, "game-over", { winner });
+        } else {
+          io.to("game-room").emit(STATE_CHANGE, "game-over", { winner: null });
+        }
         game.reset("game-over");
       }
     }

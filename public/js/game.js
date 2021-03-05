@@ -123,8 +123,12 @@ AFRAME.registerComponent("game", {
   },
 
   handleTimeChange: function (time) {
-    this.game.time = time;
-    this.toStartCounter.textContent = this.game.time;
+    if (this.game.state === "start-play") {
+      this.game.time = time;
+      this.toStartCounter.textContent = this.game.time;
+    } else {
+      console.log(time);
+    }
   },
 
   handleLobbyState: function () {
@@ -213,8 +217,18 @@ AFRAME.registerComponent("game", {
 
   handleGameOver: function (obj) {
     this.winner.style.display = "inline-block";
-    this.winnerText.textContent =
-      obj.winner.id === socket.id ? "You won!" : "You lost!";
+
+    if (!obj.winner) {
+      this.winnerText.textContent = "Ran out of time!";
+      for (egg of this.eggs) {
+        egg.remove();
+      }
+      this.eggs = [];
+    } else {
+      this.winnerText.textContent =
+        obj.winner.id === socket.id ? "You won!" : "You lost!";
+    }
+
     showElement(this.startBtnGrp);
     showElement(this.startBtn);
   },
