@@ -47,8 +47,12 @@ p {
   color: rgb(5, 5, 5);
 }
 
-#player-point-title {
+.lg {
   font-size: 1.5rem;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 #points {
@@ -57,6 +61,6 @@ p {
   left: 0;
 }
 
-#winner {
-  display: none;
+#middle-ui {
+  display: inline-block;
 }

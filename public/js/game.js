@@ -222,7 +222,6 @@ AFRAME.registerComponent("game", {
   },
 
   handleGameOver: function (obj) {
-    this.middleUI.style.display = "inline-block";
     this.winnerText.style.display = "block";
 
     if (!obj.winner) {
