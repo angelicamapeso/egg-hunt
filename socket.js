@@ -10,6 +10,7 @@ const {
   REMOVE_PLAYER,
   STATE_CHANGE,
   EGG_GRAB,
+  TIME_CHANGE,
 } = require("./socket-events.js");
 
 // The game state for the server
@@ -65,9 +66,43 @@ module.exports = function (io) {
     });
 
     socket.on(STATE_CHANGE, (state) => {
-      const validStates = ["lobby", "ready", "playing", "game-over"];
+      const validStates = [
+        "lobby",
+        "ready",
+        "start-play",
+        "playing",
+        "game-over",
+      ];
       if (validStates.includes(state)) {
         switch (state) {
+          case "start-play":
+            game.state = state;
+            socket.to("game-room").emit(STATE_CHANGE, "start-play");
+            game.startInterval(
+              1000,
+              3,
+              () => {
+                io.to("game-room").emit(TIME_CHANGE, game.time);
+              },
+              () => {
+                game.state = state;
+                // generate environment objects
+                game.envObjects = generateEnvObjects();
+
+                // generate eggs
+                game.eggs = generateEggs();
+
+                for (player of game.players) {
+                  player.points = 0;
+                }
+
+                io.to("game-room").emit(STATE_CHANGE, "playing", {
+                  envObjects: game.envObjects,
+                  eggs: game.eggs,
+                });
+              }
+            );
+            break;
           case "playing":
             game.state = state;
             // generate environment objects

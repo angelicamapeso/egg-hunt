@@ -31,6 +31,7 @@ AFRAME.registerComponent("game", {
     // Binding
     this.handleLobbyState = this.handleLobbyState.bind(this);
     this.handleReadyState = this.handleReadyState.bind(this);
+    this.handleStartPlayState = this.handleStartPlayState.bind(this);
     this.handlePlayingState = this.handlePlayingState.bind(this);
     this.handleEggGrab = this.handleEggGrab.bind(this);
     this.handleGameOver = this.handleGameOver.bind(this);
@@ -49,6 +50,7 @@ AFRAME.registerComponent("game", {
     this.socket.on(FULL_ROOM, this.hideScene.bind(this));
     this.socket.on(STATE_CHANGE, this.handleStateChange.bind(this));
     this.socket.on(EGG_GRAB, this.handleEggGrab);
+    this.socket.on(TIME_CHANGE, this.handleTimeChange.bind(this));
   },
 
   setGameObject: function (game) {
@@ -99,6 +101,9 @@ AFRAME.registerComponent("game", {
         case "ready":
           this.handleReadyState();
           break;
+        case "start-play":
+          this.handleStartPlayState();
+          break;
         case "playing":
           this.handlePlayingState(obj);
           break;
@@ -111,6 +116,11 @@ AFRAME.registerComponent("game", {
     }
   },
 
+  handleTimeChange: function (time) {
+    this.game.time = time;
+    console.log("Time change: ", this.game.time);
+  },
+
   handleLobbyState: function () {
     this.clearScene();
 
@@ -121,6 +131,10 @@ AFRAME.registerComponent("game", {
   handleReadyState: function () {
     showElement(this.startBtnGrp);
     showElement(this.startBtn);
+  },
+
+  handleStartPlayState: function () {
+    console.log("STARTING PLAY");
   },
 
   handlePlayingState: function (obj) {
@@ -287,7 +301,7 @@ AFRAME.registerComponent("game", {
 AFRAME.registerComponent("start-btn", {
   init: function () {
     this.handleClick = () => {
-      socket.emit(STATE_CHANGE, "playing");
+      socket.emit(STATE_CHANGE, "start-play");
     };
 
     this.el.addEventListener("click", this.handleClick);
