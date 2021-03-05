@@ -1,11 +1,12 @@
 class Shape {
   /* Shape positoin, material and geometry must be written as in A-Frame */
-  constructor(id, { position, rotation, material, geometry }) {
+  constructor(id, { position, rotation, material, geometry, animation }) {
     this.id = id;
     this.position = position;
     this.rotation = rotation || null;
     this.material = material;
     this.geometry = geometry;
+    this.animation = animation || null;
   }
 }
 
@@ -129,17 +130,26 @@ Shape.generateEgg = function (id) {
   const geometryString = "primitive: dodecahedron; radius: 1;";
 
   // Position
-  const position = Shape.getRandomPos(1.0);
+  const position = Shape.getRandomPos(1.5);
   const positionString = position.join(" ");
 
   // Material
   const colour = Shape.getRandColour();
   const materialString = `color: ${colour};`;
 
+  const animationHoverString = `property: position; from: ${position[0]} ${
+    position[1]
+  } ${position[2]}; to: ${position[0]} ${position[1] - 0.2} ${
+    position[2]
+  }; dur: 900; delay: ${
+    Math.random() * 1000
+  }; easing: easeInOutQuad; dir: alternate; loop: true;`;
+
   return new Shape(id, {
     geometry: geometryString,
     position: positionString,
     material: materialString,
+    animation: animationHoverString,
   });
 };
 
