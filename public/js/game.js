@@ -175,12 +175,14 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtnGrp);
     hideElement(this.startBtn);
 
+    const fragment = document.createDocumentFragment();
+
     // Create environment objects
     for (object of obj.envObjects) {
       const entity = createShape(object);
       entity.setAttribute("dynamic-body", "");
       this.envObjects.push(entity);
-      this.el.appendChild(entity);
+      fragment.appendChild(entity);
     }
 
     for (egg of obj.eggs) {
@@ -190,8 +192,10 @@ AFRAME.registerComponent("game", {
       eggEntity.setAttribute("data-id", egg.id);
       eggEntity.classList.add("egg");
       this.eggs.push(eggEntity);
-      this.el.appendChild(eggEntity);
+      fragment.appendChild(eggEntity);
     }
+
+    this.el.appendChild(fragment);
   },
 
   handlePlayingState: function () {
