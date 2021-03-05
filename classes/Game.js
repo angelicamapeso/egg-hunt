@@ -45,6 +45,10 @@ Game.prototype.reset = function (state) {
   for (player of this.players) {
     player.points = 0;
   }
+  this.time = 0;
+  if (this.interval) {
+    this.interval = clearInterval(this.interval);
+  }
 };
 
 Game.prototype.getWinner = function () {
