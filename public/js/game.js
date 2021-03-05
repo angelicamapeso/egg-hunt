@@ -30,6 +30,10 @@ AFRAME.registerComponent("game", {
     this.countdownToStart = document.getElementById("countdown-to-start");
     this.toStartCounter = document.getElementById("to-start-counter");
 
+    // Camera reference
+    this.cameraRig = document.getElementById("rig");
+    this.cameraRigAttr = this.cameraRig.getAttribute("movement-controls");
+
     // Binding
     this.handleLobbyState = this.handleLobbyState.bind(this);
     this.handleReadyState = this.handleReadyState.bind(this);
@@ -138,6 +142,11 @@ AFRAME.registerComponent("game", {
   handleStartPlayState: function () {
     this.countdownToStart.style.display = "block";
     this.toStartCounter.textContent = "";
+
+    this.cameraRig.removeAttribute("movement-controls");
+    this.cameraRig.removeAttribute("look-controls");
+    this.cameraRig.object3D.position.set(0, 0, 0);
+    this.cameraRig.object3D.rotation.set(0, 0, 0);
   },
 
   handlePlayingState: function (obj) {
@@ -146,6 +155,9 @@ AFRAME.registerComponent("game", {
       this.countdownToStart.style.display = "none";
       this.gameUI.style.display = "block";
     }, 1000);
+
+    this.cameraRig.setAttribute("movement-controls", this.cameraRigAttr);
+    this.cameraRig.setAttribute("look-controls", "");
 
     this.clearScene();
 
