@@ -27,6 +27,8 @@ AFRAME.registerComponent("game", {
     this.player2Points = document.getElementById("player2-points");
     this.winner = document.getElementById("winner");
     this.winnerText = document.getElementById("winner-text");
+    this.countdownToStart = document.getElementById("countdown-to-start");
+    this.toStartCounter = document.getElementById("to-start-counter");
 
     // Binding
     this.handleLobbyState = this.handleLobbyState.bind(this);
@@ -118,7 +120,7 @@ AFRAME.registerComponent("game", {
 
   handleTimeChange: function (time) {
     this.game.time = time;
-    console.log("Time change: ", this.game.time);
+    this.toStartCounter.textContent = this.game.time;
   },
 
   handleLobbyState: function () {
@@ -134,10 +136,17 @@ AFRAME.registerComponent("game", {
   },
 
   handleStartPlayState: function () {
-    console.log("STARTING PLAY");
+    this.countdownToStart.style.display = "block";
+    this.toStartCounter.textContent = "";
   },
 
   handlePlayingState: function (obj) {
+    this.toStartCounter.textContent = "GO!";
+    setTimeout(() => {
+      this.countdownToStart.style.display = "none";
+      this.gameUI.style.display = "block";
+    }, 1000);
+
     this.clearScene();
 
     // update game state
@@ -159,7 +168,6 @@ AFRAME.registerComponent("game", {
     hideElement(this.startBtn);
 
     // show game ui
-    this.gameUI.style.display = "block";
     const currentPlayer = this.getPlayer();
     const player2 = this.getPlayer2();
     this.playerPoints.textContent = currentPlayer.points;
