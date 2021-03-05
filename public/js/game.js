@@ -26,9 +26,11 @@ AFRAME.registerComponent("game", {
     this.playerPoints = document.getElementById("player-points");
     this.player2Points = document.getElementById("player2-points");
     this.middleUI = document.getElementById("middle-ui");
+    this.timer = document.getElementById("timer");
     this.winnerText = document.getElementById("winner-text");
     this.countdownToStart = document.getElementById("countdown-to-start");
     this.toStartCounter = document.getElementById("to-start-counter");
+    this.eggsLeft = document.getElementById("eggs-left");
 
     // Camera reference
     this.cameraRig = document.getElementById("rig");
@@ -127,7 +129,7 @@ AFRAME.registerComponent("game", {
       this.game.time = time;
       this.toStartCounter.textContent = this.game.time;
     } else {
-      console.log(time);
+      this.timer.textContent = time;
     }
   },
 
@@ -144,6 +146,7 @@ AFRAME.registerComponent("game", {
   },
 
   handleStartPlayState: function () {
+    this.gameUI.style.display = "none";
     this.countdownToStart.style.display = "block";
     this.toStartCounter.textContent = "";
 
@@ -158,8 +161,11 @@ AFRAME.registerComponent("game", {
     setTimeout(() => {
       this.countdownToStart.style.display = "none";
       this.gameUI.style.display = "block";
+      this.middleUI.style.display = "inline-block";
+      this.winnerText.style.display = "none";
     }, 1000);
 
+    this.eggsLeft.textContent = obj.eggs.length;
     this.cameraRig.setAttribute("movement-controls", this.cameraRigAttr);
     this.cameraRig.setAttribute("look-controls", "");
 
@@ -217,6 +223,7 @@ AFRAME.registerComponent("game", {
 
   handleGameOver: function (obj) {
     this.middleUI.style.display = "inline-block";
+    this.winnerText.style.display = "block";
 
     if (!obj.winner) {
       this.winnerText.textContent = "Ran out of time!";
@@ -302,6 +309,7 @@ AFRAME.registerComponent("game", {
       }
 
       this.lastEggRemoved = eggIDint;
+      this.eggsLeft.textContent = this.eggs.length;
 
       // check if game over after removing egg
       if (this.game.state !== "game-over" && this.game.eggs.length === 0) {
