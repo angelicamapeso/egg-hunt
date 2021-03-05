@@ -77,10 +77,12 @@ module.exports = function (io) {
         switch (state) {
           case "start-play":
             game.state = state;
-            socket.to("game-room").emit(STATE_CHANGE, "start-play");
+            io.to("game-room").emit(STATE_CHANGE, "start-play");
+            const countdownFrom = 3;
+            io.to("game-room").emit(TIME_CHANGE, countdownFrom);
             game.startInterval(
               1000,
-              3,
+              countdownFrom - 1,
               () => {
                 io.to("game-room").emit(TIME_CHANGE, game.time);
               },

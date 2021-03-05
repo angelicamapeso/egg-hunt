@@ -57,7 +57,8 @@ Game.prototype.getWinner = function () {
   return winner;
 };
 
-// interval time and end time must be in miliseconds
+// interval must be in miliseconds
+// end time must be in seconds
 Game.prototype.startInterval = function (
   intervalTime,
   endTime,
@@ -68,7 +69,7 @@ Game.prototype.startInterval = function (
   this.interval = setInterval(() => {
     intervalCallback();
     this.time -= 1;
-    if (this.time <= 0) {
+    if (this.time < 0) {
       this.time = 0;
       this.interval = clearInterval(this.interval);
       endCallback();
